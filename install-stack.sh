@@ -174,11 +174,11 @@ service nginx stop
 service php5-fpm stop
 
 # disable and remove default site
-rm -f /etc/nginx/sites-enabled/default
-rm -f /etc/nginx/sites-available/default
+# rm -f /etc/nginx/sites-enabled/default
+# rm -f /etc/nginx/sites-available/default
 
 # remove the default php-fpm pool
-rm -f /etc/php5/fpm/pool.d/www.conf
+# rm -f /etc/php5/fpm/pool.d/www.conf
 
 # create a location for site specific log files
 if [ ! -d "/var/log/nginx" ]; then
