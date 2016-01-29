@@ -153,14 +153,21 @@ touch /tmp/restart-fail2ban
 ###############################################################################
 ### install postgresql
 ###############################################################################
-
-aptitude -y install postgresql
+# aptitude -y install postgresql
 
 ###############################################################################
 ### install and configure nginx and php
 ###############################################################################
 
-aptitude -y install nginx php5 php5-cli php5-pgsql php5-curl php5-mcrypt php5-gd php5-imagick php5-fpm
+aptitude -y install nginx php5 php5-cli php5-pgsql php5-curl php5-mcrypt php5-gd php5-imagick php5-fpm php5-dev
+
+# install php-redis
+git clone git://github.com/nicolasff/phpredis.git /tmp/phpredis
+cd /tmp/phpredis
+phpize
+./configure
+make
+sudo -s make install
 
 # stop the services
 service nginx stop
