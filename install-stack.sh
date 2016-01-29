@@ -181,6 +181,9 @@ service php5-fpm stop
 # remove the default php-fpm pool
 # rm -f /etc/php5/fpm/pool.d/www.conf
 
+# overwrite default site
+echo "<html><body><!-- host: $DOMAIN --></body></html>" > "/usr/share/nginx/html/index.html"
+
 # create a location for site specific log files
 if [ ! -d "/var/log/nginx" ]; then
   mkdir /var/log/nginx
