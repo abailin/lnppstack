@@ -72,7 +72,7 @@ aptitude -y full-upgrade
 aptitude -y install git-core
 
 # clone the lnpp stack repo
-git clone https://github.com/gizmovation/lnppstack.git /tmp/lnppstack
+git clone https://github.com/abailin/lnppstack.git /tmp/lnppstack
 
 # copy the helpers
 cp /tmp/lnppstack/helpers/* /usr/local/bin/
