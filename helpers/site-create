@@ -21,7 +21,7 @@ then
 sudo bash -c "cat > /etc/nginx/sites-available/$1" <<END
 server {
   server_name _;
-  root /home/$user/sites/$1/public;
+  root /srv/public;
 
   access_log  /var/log/nginx/$1-access.log;
   error_log  /var/log/nginx/$1-error.log;
@@ -43,43 +43,67 @@ server {
   }
 
 }
-END
-mkdir "/home/$user/sites/$1/public"
-echo "<html><head><title>Welcome</title></head><body>NGINX</body></html>" > "/home/$user/sites/$1/public/index.html"
-else
-sudo bash -c "cat > /etc/nginx/sites-available/$1" <<END
-# redirect www to non-www
-server {
-  server_name www.$1;
-  return 301 \$scheme://$1\$request_uri;
-}
 
 server {
-  server_name $1;
-  root /srv/$1/public_html;
+  listen 80 default_server;
+  listen [::]:80 default_server;
 
-  access_log  /var/log/nginx/$1-access.log;
-  error_log  /var/log/nginx/$1-error.log;
+  root /srv/public;
 
-  include /etc/nginx/includes/location.conf;
+  # Add index.php to the list if you are using PHP
+  index index.html index.htm index.nginx-debian.html;
+
+  server_name _;
 
   location / {
-    try_files \$uri \$uri/ /index.php?\$args;
-    #try_files \$uri \$uri/ /index.php?q=$uri&\$args; #wordpress
+    # First attempt to serve request as file, then
+    # as directory, then fall back to displaying a 404.
+    try_files $uri $uri/ =404;
   }
-
-  # pass all .php files to php-fpm
-  location ~ \.php$ {
-    try_files \$uri =404;
-    fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    fastcgi_param  PHP_VALUE  "open_basedir=/var/log/php/:/var/lib/php/:/home/$user/sites/$1/";
-    include fastcgi_params;
-    fastcgi_index index.php;
-    fastcgi_pass unix:/var/run/php5-fpm-$1.sock;
-  }
-
 }
 END
+mkdir "/srv/public"
+echo "<html><head><title>Welcome</title></head><body>NGINX</body></html>" > "/srv/public/index.html"
+else
+# sudo bash -c "cat > /etc/nginx/sites-available/$1" <<END
+# # redirect www to non-www
+# server {
+#   server_name www.$1;
+#   return 301 \$scheme://$1\$request_uri;
+# }
+
+# server {
+#   server_name $1;
+#   root /srv/$1/public_html;
+
+#   access_log  /var/log/nginx/$1-access.log;
+#   error_log  /var/log/nginx/$1-error.log;
+
+#   include /etc/nginx/includes/location.conf;
+
+#   location / {
+#     try_files \$uri \$uri/ /index.php?\$args;
+#     #try_files \$uri \$uri/ /index.php?q=$uri&\$args; #wordpress
+#   }
+
+#   # pass all .php files to php-fpm
+#   location ~ \.php$ {
+#     try_files \$uri =404;
+#     fastcgi_split_path_info ^(.+\.php)(/.+)$;
+#     fastcgi_param  PHP_VALUE  "open_basedir=/var/log/php/:/var/lib/php/:/home/$user/sites/$1/";
+#     include fastcgi_params;
+#     fastcgi_index index.php;
+#     fastcgi_pass unix:/var/run/php5-fpm-$1.sock;
+#   }
+
+# }
+# END
+  if [ ! -f "/srv/$1/vhost.conf" ]; then
+    echo "cannot find vhost: /srv/$1/vhost.conf"
+    exit 1
+  fi
+
+  sudo cp /srv/$1/vhost.conf /etc/nginx/sites-available/$1
 fi
 echo "Created the nginx site config."
 
