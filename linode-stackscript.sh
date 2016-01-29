@@ -46,7 +46,7 @@ wget https://raw.githubusercontent.com/gizmovation/lnppstack/master/install-stac
 chmod +x /tmp/install-stack.sh
 
 # execute the install script
-./tmp/install-stack.sh
+/tmp/install-stack.sh
 
 # cleanup
 rm -rf /tmp/*
