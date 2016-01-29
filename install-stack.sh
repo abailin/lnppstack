@@ -87,6 +87,11 @@ echo "$USERNAME:$PASSWORD" | chpasswd
 echo "$USERNAME ALL=(ALL) ALL" >> /etc/sudoers
 usermod -a -G adm $USERNAME
 
+# give permissions on /srv (to www-data)
+usermod -a -G www-data $USERNAME
+chown www-data /srv
+chmod 0775 /srv
+
 ###############################################################################
 ### install and configure postfix for local mail only
 ###############################################################################
