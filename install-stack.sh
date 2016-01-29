@@ -168,6 +168,7 @@ phpize
 ./configure
 make
 sudo -s make install
+echo -e "\n extension=redis.so" >> /etc/php5/fpm/php.ini
 
 # stop the services
 service nginx stop
