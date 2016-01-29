@@ -7,30 +7,13 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-# make sure the user's home directory exists, else exit
-if [ ! -d "/home/$user" ]; then
-  echo "Error: Home directory for user $user was not found."
-  exit 1
-fi
-
-# make sure the site doesn't already exist
-if [ -d "/home/$user/sites/$1" ]; then
-  echo "Error: The site /home/$user/sites/$1 already exists."
+# make sure site exists in /srv
+if [ ! -d "/srv/$1" ]; then
+  echo "Error: make sure /srv/$1 exists"
   exit 1
 fi
 
 echo "Creating site..."
-
-# create the sites dir if it doesn't exist
-if [ ! -d "/home/$user/sites" ]; then
-  mkdir "/home/$user/sites"
-  echo "Created the sites directory."
-fi
-
-# create the site directory and set owner
-mkdir "/home/$user/sites/$1"
-echo "Created the $1 directory."
-
 
 # create the nginx site configuration
 if [ $1 = "default" ]
@@ -73,7 +56,7 @@ server {
 
 server {
   server_name $1;
-  root /home/$user/sites/$1/public;
+  root /srv/$1/public_html;
 
   access_log  /var/log/nginx/$1-access.log;
   error_log  /var/log/nginx/$1-error.log;
@@ -156,40 +139,6 @@ fi
 
 # add an entry to the monit configuration for php-fpm
 sudo sed -ri "s/(\s*### INSERTHERE.+)/\1\n  if failed unixsocket \/var\/run\/php5-fpm-$1.sock then restart/" /etc/monit/conf.d/php5-fpm
-
-# ask user about creating git repo
-read -rep $'Would you like to create a git repo for this site? [y]\n' -n 1
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-
-  # create the repos dir if it doesn't exist
-  if [ ! -d "/home/$user/repos" ]; then
-    mkdir "/home/$user/repos"
-    echo "Created the repos directory."
-  fi
-
-  # create a git repo for the site
-  mkdir "/home/$user/repos/$1.git"
-  cd "/home/$user/repos/$1.git"
-  git init --bare
-  chown -R $user:$user "/home/$user/sites/$1"
-  echo "Created the git repo for $1."
-
-  # create the post-receive hook for automatic updates
-  sudo bash -c "cat > /home/$user/repos/$1.git/hooks/post-receive" <<END
-#!/bin/sh
-GIT_WORK_TREE=/home/$user/sites/$1/
-export GIT_WORK_TREE
-git checkout -f
-END
-  sudo chmod +x "/home/$user/repos/$1.git/hooks/post-receive"
-  echo "Created the post-receive hook."
-
-  echo "Finished git repository creation for site $1."
-  echo "Use: git remote add web ssh://$user@$1:22/home/$user/repos/$1.git"
-  echo "and: git push web +master:refs/heads/master"
-
-fi
 
 # restart services
 sudo service nginx reload
