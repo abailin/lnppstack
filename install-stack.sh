@@ -315,13 +315,14 @@ for service_name in $(ls /tmp/ | grep restart-* | cut -d- -f2-10); do
   rm -f /tmp/restart-$service_name
 done
 
-mail -s "LNPP Stack install for $HOSTNAME" $ADMINEMAIL <<EOT
-LNPP Stack installation complete. Your server will need to be rebooted. You can login via ssh using your RSA key. Root login and password authentication for ssh have been disabled.
+# enable this to send email when done
+# mail -s "LNPP Stack install for $HOSTNAME" $ADMINEMAIL <<EOT
+# LNPP Stack installation complete. Your server will need to be rebooted. You can login via ssh using your RSA key. Root login and password authentication for ssh have been disabled.
 
-Once you login, you can start creating and managing sites using the helper scripts available in /usr/local/bin.
+# Once you login, you can start creating and managing sites using the helper scripts available in /usr/local/bin.
 
-For more info, please visit: https://github.com/gizmovation/lnppstack
+# For more info, please visit: https://github.com/gizmovation/lnppstack
 
-Enjoy!
-EOT
+# Enjoy!
+# EOT
 
