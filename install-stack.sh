@@ -239,11 +239,11 @@ touch /tmp/restart-php5-fpm
 ### install and configure beanstalkd queue
 ###############################################################################
 
-aptitude -y install beanstalkd
+# aptitude -y install beanstalkd
 
-sed -i "s/#START=yes/START=yes/g" /etc/default/beanstalkd
+# sed -i "s/#START=yes/START=yes/g" /etc/default/beanstalkd
 
-touch /tmp/restart-beanstalkd
+# touch /tmp/restart-beanstalkd
 
 ###############################################################################
 ### install and configure monit
