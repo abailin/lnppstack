@@ -6,8 +6,8 @@ if [ -z "$1" ];then
 fi
 
 # make sure the site directory exists
-if [ ! -d "/home/$user/sites/$1" ]; then
-  echo "The site: /home/$user/sites/$1 does not exist."
+if [ ! -d "/srv/$1" ]; then
+  echo "The site: /srv/$1 does not exist."
   exit 1
 fi
 
@@ -19,14 +19,14 @@ echo "Enabled the nginx site config."
 sudo mv /etc/php5/fpm/pool.d/$1.disabled /etc/php5/fpm/pool.d/$1.conf
 echo "Enabled the php-fpm pool."
 
-if [ -f /etc/monit/conf.d/php5-fpm ]; then
-  # add an entry to the monit configuration for php-fpm
-  sudo sed -ri "s/(\s*### INSERTHERE.+)/\1\n  if failed unixsocket \/var\/run\/php5-fpm-$1.sock then restart/" /etc/monit/conf.d/php5-fpm
-fi
+# if [ -f /etc/monit/conf.d/php5-fpm ]; then
+#   # add an entry to the monit configuration for php-fpm
+#   sudo sed -ri "s/(\s*### INSERTHERE.+)/\1\n  if failed unixsocket \/var\/run\/php5-fpm-$1.sock then restart/" /etc/monit/conf.d/php5-fpm
+# fi
 
 # restart services
 sudo service nginx reload
 sudo service php5-fpm restart
-sudo service monit restart
+# sudo service monit restart
 
 echo "The site: $1 has been enabled."

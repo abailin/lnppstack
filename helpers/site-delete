@@ -8,16 +8,16 @@ if [ -z "$1" ];then
 fi
 
 # make sure the site directory exists
-if [ ! -d "/home/$user/sites/$1" ]; then
-  echo "The site: /home/$user/sites/$1 does not exist."
+if [ ! -d "/srv/$1" ]; then
+  echo "The site: /srv/$1 does not exist."
   exit 1
 fi
 
-read -rep $'WARNING: This will completely delete all files for the site $1. Are you sure you want to continue? [y]\n' -n 1
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
-    exit 1
-fi
+# read -rep $'WARNING: This will completely delete all files for the site $1. Are you sure you want to continue? [y]\n' -n 1
+# if [[ ! $REPLY =~ ^[Yy]$ ]]
+# then
+#     exit 1
+# fi
 
 # remove the nginx site config
 sudo rm -f /etc/nginx/sites-enabled/$1
@@ -29,25 +29,25 @@ sudo rm -f /etc/php5/fpm/pool.d/$1.conf
 sudo rm -f /etc/php5/fpm/pool.d/$1.disabled
 echo "Removed php-fpm pool."
 
-if [ -f /etc/monit/conf.d/php5-fpm ]; then
-  # delete the entry to the monit configuration for php-fpm
-  sudo sed -i "/$1\.sock/d" /etc/monit/conf.d/php5-fpm
-fi
+# if [ -f /etc/monit/conf.d/php5-fpm ]; then
+#   # delete the entry to the monit configuration for php-fpm
+#   sudo sed -i "/$1\.sock/d" /etc/monit/conf.d/php5-fpm
+# fi
 
-# delete the site's git repo if it exists
-if [ -d "/home/$user/repos/$1.git" ]; then
-  sudo rm -rf /home/$user/repos/$1.git
-  echo "Removed site git repo."
-fi
+# # delete the site's git repo if it exists
+# if [ -d "/home/$user/repos/$1.git" ]; then
+#   sudo rm -rf /home/$user/repos/$1.git
+#   echo "Removed site git repo."
+# fi
 
-# remove the site files
-rm -rf /home/$user/sites/$1
-echo "Removed site files."
+# # remove the site files
+# rm -rf /home/$user/sites/$1
+# echo "Removed site files."
 
 # restart services
 sudo service nginx reload
 sudo service php5-fpm reload
-sudo service monit restart
+# sudo service monit restart
 
 echo "The site: $1 has been deleted."
 exit
