@@ -290,6 +290,15 @@ ufw allow https/tcp
 # enable firewall
 echo y|ufw enable
 
+######################
+### create ssh key
+######################
+
+ssh-keygen -t rsa -b 4096 -f "$USERNAME/.ssh/id_rsa"
+echo " --> Your public RSA key: "
+cat "$USERNAME/.ssh/id_rsa.pub"
+echo " ^^^^^^ "
+
 ###############################################################################
 ### perform cleanup
 ###############################################################################
