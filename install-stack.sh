@@ -214,10 +214,10 @@ sed -i 's/^disable_functions =/disable_functions = php_uname, passthru, leak, li
 sed -i 's/^display_errors = On/display_errors = Off/' $phpini
 sed -i 's/^session.cookie_httponly =/session.cookie_httponly = 1/' $phpini
 sed -i 's/^file_uploads = On/file_uploads = Off/' $phpini
-sed -i 's/^upload_max_filesize =.*/upload_max_filesize = 2MB/' $phpini
-sed -i 's/^post_max_size =.*/post_max_size = 20K/' $phpini
+sed -i 's/^upload_max_filesize =.*/upload_max_filesize = 50M/' $phpini
+sed -i 's/^post_max_size =.*/post_max_size = 50M/' $phpini
 sed -i 's/^max_execution_time =.*/max_execution_time = 30/' $phpini
-sed -i 's/^memory_limit = 128M/memory_limit = 12M/' $phpini
+sed -i 's/^memory_limit = 128M/memory_limit = 64M/' $phpini
 sed -i 's/^register_globals = On/register_globals = Off/' $phpini
 sed -i 's/^allow_url_fopen = On/allow_url_fopen = Off/' $phpini
 sed -i 's/^allow_url_include = On/allow_url_include = Off/' $phpini
