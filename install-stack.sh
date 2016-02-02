@@ -249,27 +249,27 @@ touch /tmp/restart-php5-fpm
 ### install and configure monit
 ###############################################################################
 
-aptitude -y install monit
+# aptitude -y install monit
 
-cp -f /tmp/lnppstack/monit/monitrc /etc/monit/monitrc
-sed -i "s/\$HOSTNAME/$HOSTNAME/g" /etc/monit/monitrc
-sed -i "s/\$ADMINEMAIL/$ADMINEMAIL/g" /etc/monit/monitrc
+# cp -f /tmp/lnppstack/monit/monitrc /etc/monit/monitrc
+# sed -i "s/\$HOSTNAME/$HOSTNAME/g" /etc/monit/monitrc
+# sed -i "s/\$ADMINEMAIL/$ADMINEMAIL/g" /etc/monit/monitrc
 
-if [ ! -d "/etc/monit/conf.d/" ]; then
-  mkdir -p /etc/monit/conf.d/
-fi
+# if [ ! -d "/etc/monit/conf.d/" ]; then
+#   mkdir -p /etc/monit/conf.d/
+# fi
 
-cp /tmp/lnppstack/monit/system /etc/monit/conf.d/system
-sed -i "s/\$HOSTNAME/$HOSTNAME/g" /etc/monit/conf.d/system
+# cp /tmp/lnppstack/monit/system /etc/monit/conf.d/system
+# sed -i "s/\$HOSTNAME/$HOSTNAME/g" /etc/monit/conf.d/system
 
-cp /tmp/lnppstack/monit/sshd /etc/monit/conf.d/sshd
-sed -i "s/\$SSHPORT/$SSHPORT/g" /etc/monit/conf.d/sshd
+# cp /tmp/lnppstack/monit/sshd /etc/monit/conf.d/sshd
+# sed -i "s/\$SSHPORT/$SSHPORT/g" /etc/monit/conf.d/sshd
 
-cp /tmp/lnppstack/monit/postfix /etc/monit/conf.d/postfix
-cp /tmp/lnppstack/monit/postgresql /etc/monit/conf.d/postgresql
-cp /tmp/lnppstack/monit/beanstalkd /etc/monit/conf.d/beanstalkd
+# cp /tmp/lnppstack/monit/postfix /etc/monit/conf.d/postfix
+# cp /tmp/lnppstack/monit/postgresql /etc/monit/conf.d/postgresql
+# cp /tmp/lnppstack/monit/beanstalkd /etc/monit/conf.d/beanstalkd
 
-touch /tmp/restart-monit
+# touch /tmp/restart-monit
 
 ###############################################################################
 ### install and configure firewall
