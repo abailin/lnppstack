@@ -159,7 +159,7 @@ touch /tmp/restart-fail2ban
 ### install and configure nginx and php
 ###############################################################################
 
-aptitude -y install nginx php5 php5-cli php5-pgsql php5-curl php5-mcrypt php5-gd php5-imagick php5-fpm php5-dev
+aptitude -y install nginx php5 php5-cli php5-pgsql php5-mysql php5-curl php5-mcrypt php5-gd php5-imagick php5-fpm php5-dev
 
 # install php-redis
 git clone git://github.com/nicolasff/phpredis.git /tmp/phpredis
@@ -294,9 +294,13 @@ echo y|ufw enable
 ### create ssh key
 ######################
 
-ssh-keygen -t rsa -b 4096 -f "$USERNAME/.ssh/id_rsa"
+ssh-keygen -t rsa -b 4096 -f "$USER_HOME/.ssh/id_rsa"
+sudo chown $USERNAME:$USERNAME $USER_HOME/.ssh/id_rsa
+sudo chown $USERNAME:$USERNAME $USER_HOME/.ssh/id_rsa.pub
+eval "$(ssh-agent -s)"
+ssh-add $USER_HOME/.ssh/id_rsa
 echo " --> Your public RSA key: "
-cat "$USERNAME/.ssh/id_rsa.pub"
+cat $USER_HOME/.ssh/id_rsa.pub
 echo " ^^^^^^ "
 
 ###############################################################################
