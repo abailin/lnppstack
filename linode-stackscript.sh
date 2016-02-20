@@ -50,3 +50,9 @@ chmod +x /tmp/install-stack.sh
 
 # cleanup
 rm -rf /tmp/*
+
+reboot
+
+# to install a site:
+# git clone repo_name
+# site-create repo_name
